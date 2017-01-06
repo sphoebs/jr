@@ -1,3 +1,5 @@
+.DS_Store
+
 # Logs
 logs
 *.log
@@ -31,6 +33,7 @@ node_modules
 jspm_packages
 server/node_modules
 client/node_modules
+native/node_modules
 
 
 # Optional npm cache directory
@@ -38,6 +41,12 @@ client/node_modules
 
 # Optional REPL history
 .node_repl_history
+
+
+#client
+client/.env
+client/npm-debug.log
+client/.DS_Store
 
 # client build
 build
