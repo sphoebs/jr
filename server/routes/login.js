@@ -39,7 +39,7 @@ loginRouter.get('/google/', function(req, res, next) {
   //res.send('respond google login');
   console.log('in login')
   console.log(req.session)
-  if (req.session && req.session.user) { res.send("hi "+req.session.user); }
+  if (req.session && req.session.user) { res.send("already logged in. hi "+req.session.user); }
   else res.redirect(google_auth_url );
 });
 
