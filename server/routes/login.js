@@ -35,11 +35,32 @@ loginRouter.get('/', function(req, res, next) {
   res.send('resoponse from login ');
 });
 
+loginRouter.get('/isLoggedIn/', function(req, res, next) {
+  console.log('in isLoggedIn' + req.session)
+  res.setHeader('Content-Type', 'application/json');
+
+  //console.log(req.session)
+  if (req.session && req.session.user) {
+    res.send(JSON.stringify({ user: req.session.user }))
+  }
+
+//    res.send("already logged in. hi "+req.session.user); }
+  else {
+    console.log('no login');
+    res.send(JSON.stringify({}));
+    //console.log('no login')
+  };
+});
+
 loginRouter.get('/google/', function(req, res, next) {
   //res.send('respond google login');
-  console.log('in login')
-  console.log(req.session)
-  if (req.session && req.session.user) { res.send("already logged in. hi "+req.session.user); }
+  console.log('in login' + req.session)
+  //console.log(req.session)
+  if (req.session && req.session.user) {
+    console.log('aleadt =y in ' + req.session)
+    res.redirect('http://localhost:3000/');
+    //res.send("already logged in. hi "+req.session.user);
+  }
   else res.redirect(google_auth_url );
 });
 
@@ -61,7 +82,8 @@ loginRouter.get('/google/callback', function(req, res, next) {
                    console.log(json_response);
                    req.session.user = json_response.email;
                    console.log(req.session.user);
-                   res.send('hei '+req.session.user);
+                   //res.send('hei '+req.session.user);
+                   res.redirect('/');
                }   )
                .catch(  () => {console.log("fetch error")}   )//TODO error mgmt in this function
        }

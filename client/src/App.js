@@ -4,12 +4,21 @@ import './App.css';
 import Home from './layouts/Home';
 import Landing from './layouts/Landing';
 
+
+
+var serverURL='http://localhost:5000'
+
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {loggedin: 'NOOOOO'};
+  }
 
   login () {
 
     let header = new Headers({
-    'Access-Control-Allow-Origin':'*',
+    'Access-Control-Allow-Origin':'http://localhost:3000',
     'Content-Type': 'multipart/form-data'
   });
   let sentData={
@@ -18,32 +27,37 @@ class App extends Component {
     header: header
   };
 
-    var google_url = "https://accounts.google.com/o/oauth2/v2/auth?scope=profile"+
-    "&response_type=code"+
-    "&client_id=1093539287627-urgjti6ok0dt59v0snvahqskvr6a95js.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost:5000%2Flogin%2Fgoogle%2Fcallback";
-
-
-    google_url = 'http://localhost:5000/login/google'
-    fetch(google_url, sentData)
-    //.then (r => {return r.text()})
-    .then(r => {
-                for (var value of r.headers.values()) {
-                      console.log(value);
-                    }
-                  return true})
-    .catch (error => console.log('error'+ error))
   }
 
+  logged='no'
   componentWillMount() {
-    console.log('in willmount')
-  this.login()
+    console.log('in willmountxx')
+
+
+    fetch(serverURL+'/login/isLoggedIn', {method:'GET', credentials:'include'})
+    .then(r => {
+      console.log ('reply')
+      return r.json()
+
+    })
+    .then(r => { if (r.user)  {
+      this.setState({loggedin:'yes'})
+      return console.log('YES r: '+ r)
+      }
+    })
+    .catch(e => console.log('error in componentWillMount: '+ e))
+  //this.login()
+
+
   }
 
 
   render() {
+    var loginUrl = serverURL+'/login/google';
+
     return (
       <div className="App">
-      <a href = 'http://localhost:5000/login/google'> login </a>
+      <a href = {loginUrl}> login with google {this.state.loggedin} </a>
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>

@@ -48,6 +48,27 @@ server
 
 # Configuring gitignore
 
+# managing cors
+~~~~
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+~~~~
+
+https://github.com/expressjs/cors
+
+and remember to include credentials when using fetch
+fetch('/api/v2/user/me', {
+  method: "GET",
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Cache': 'no-cache'
+  },
+  credentials: 'include'
+})
 
 
 # configure http and https
