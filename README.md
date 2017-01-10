@@ -1,3 +1,71 @@
+
+
+# AWS setup
+## Basics
+
+### create EC2 instance (ubuntu)
+### install nginx
+`sudo apt-get install nginx`
+
+on AWS, add rule to allow http/s traffic
+
+### install git
+`sudo apt-get install git`
+
+### install mysql, if you need it
+`sudo apt-get install mysql-server`
+`/usr/bin/mysql_secure_installation`
+
+`sudo service mysql start`
+
+to launch at reboot
+`sudo /usr/sbin/update-rc.d mysql defaults`
+
+run mysql shell
+`/usr/bin/mysql -u root -p`
+
+create some database
+`CREATE DATABASE someDB;`
+create some user
+`CREATE USER 'someusername'@'%' IDENTIFIED BY 'some_pass';`
+
+`GRANT ALL PRIVILEGES ON somedbname.* TO 'someuser'@'%'`
+
+## configure http and https
+lets say your domain name is mydomain
+
+on your DNS, set A record to point to the EC2 instance for www and for @
+the update will get some time to get through
+
+verify that this has happened by starting nginx `sudo service nginx start` and connecting to EC2 from browser to mydomain.com
+
+install letsencrypt
+`sudo apt-get install letsencrypt`
+
+A [letsencrypt instructions] [https://certbot.eff.org/#ubuntuxenial-nginx]
+
+[https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04]
+
+
+replace the folder and certificate names. this is for nginx
+
+letsencrypt certonly --webroot -w /var/www/mydomain -d mydomain.com -d www.mydomain.com -w /var/www/myotherdomain -d myotherdomain.is -d m.myotherdomain.is
+
+in sites-available/default, edit the root to point to /var/www/jointresearch
+then add
+location ~ /.well-known {
+        allow all;
+}
+then run  
+
+https://certbot.eff.org/#ubuntuxenial-nginx
+
+`sudo letsencrypt certonly --webroot -w /var/www/jointresearch -d jointresearch.net -d www.jointresearch.net`
+
+configure nginx
+https://www.linode.com/docs/websites/nginx/how-to-configure-nginx
+
+
 # Folder setup
 create your main directory for the project <proj_main>
 
@@ -71,36 +139,6 @@ fetch('/api/v2/user/me', {
 })
 
 
-# configure http and https
-
-#install nginx
-`sudo apt-get install nginx`
-
-install git
-`sudo apt-get install git`
-
-install letsencrypt
-`sudo apt-get install letsencrypt`
-
-
-https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04
-
-
-replace the folder and certificate names. this is for nginx
-
-in sites-available/default, edit the root to point to /var/www/jointresearch
-then add
-location ~ /.well-known {
-        allow all;
-}
-then run  
-
-https://certbot.eff.org/#ubuntuxenial-nginx
-
-`sudo letsencrypt certonly --webroot -w /var/www/jointresearch -d jointresearch.net -d www.jointresearch.net`
-
-configure nginx
-https://www.linode.com/docs/websites/nginx/how-to-configure-nginx
 
 # setup for production
 
